@@ -26,6 +26,26 @@
             return pitch;
         }
 
+        function pitchPrint(num) {
+            switch (num) {
+                case 0:
+                    strike();
+                    break;
+
+                case 1:
+                    ball();
+                    break;
+
+                case 2:
+                    hit();
+                    break;
+
+                default:
+                    out();
+                    break;
+            }
+        }
+
         //스트라이크일때 결과 출력 및 값 수정
         function strike() {
             document.write("스트라이크!<br>");
@@ -64,42 +84,14 @@
         }
 
         function main() {
-
             while (ballCount[2] < 3) {
-
-                switch (pitch()) {
-                    case 0:
-                        strike();
-                        break;
-
-                    case 1:
-                        ball();
-                        break;
-
-                    case 2:
-                        hit();
-                        break;
-
-                    default:
-                        out();
-                        break;
-                }
-
-                if (ballCount[0] === 3) {
-                    out();
-                }
-
-                if (ballCount[1] === 4) {
-                    hit();
-                }
-
+                pitchPrint(pitch());
+                if (ballCount[0] === 3) out();
+                if (ballCount[1] === 4) hit();
                 ballCountPrint();
-
             }
-
             hitCountPrint();
             document.write("Game Over<br>")
-
         }
 
         main();
