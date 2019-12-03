@@ -8,5 +8,123 @@
 </head>
 <body>
     
+    <script>
+
+        let team1 = [],
+            team2 = [],
+            team1Name ="",
+            team2Name ="";
+
+        function Player(no, name, hitRate) { // 플레이어 객체 생성
+            this.no = no;
+            this.name = name;
+            this.hitRate = hitRate;
+        }
+
+        function team1NameAdd(){ //1팀 이름 추가
+            team1Name = prompt("1번 팀의 이름을 입력하세요");
+            team1.push(team1Name);
+            document.write("1팀의 이름을 입력하세요> "
+                            +team1[0] + "<br>");
+        }
+
+        function team2NameAdd(){ //2팀 이름 추가
+            team2Name = prompt("2번 팀의 이름을 입력하세요");
+            team2.push(team2Name);
+            document.write("2팀의 이름을 입력하세요> "
+                            +team2[0] + "<br>");
+        }
+
+        function team1PlayerAdd(){ //1팀 플레이어 정보 추가
+
+            let input ="",
+                inputArray = [],
+                player = {};
+
+            for (let  i = 0; i < 9; i++) {
+                    document.write((i+1) + "번 타자 정보를 입력>");
+                    input = prompt("타자이름, 타율");
+                    inputArray = input.split(", ");
+                    player = new Player(i+1, inputArray[0], inputArray[1]);
+                    team1.push(player);
+                    document.write(team1[i+1].name + ", " + team1[i+1].hitRate + "<br>");
+                }
+            }
+
+        function team2PlayerAdd(){ //2팀 플레이어 정보 추가
+
+            let input ="",
+                inputArray = [],
+                player = {};
+
+            for (let  i = 0; i < 9; i++) {
+                    document.write((i+1) + "번 타자 정보를 입력>");
+                    input = prompt("타자이름, 타율");
+                    inputArray = input.split(", ");
+                    player = new Player(i+1, inputArray[0], inputArray[1]);
+                    team2.push(player);
+                    document.write(team2[i+1].name + ", " + team2[i+1].hitRate + "<br>");
+                }
+            }
+
+        function team1Info(){ //1팀 정보 출력
+            document.write(team1[0] + " 팀 정보><br>");
+            for (let  i = 1; i < team1.length; i++) {
+                    document.write( i + "번 " + team1[i].name + ", " + team1[i].hitRate + "<br>");
+                }
+            }
+        
+        function team2Info(){ //2팀 정보 출력
+            document.write(team2[0] + " 팀 정보><br>");
+            for (let  i = 1; i < team2.length; i++) {
+                    document.write( i + "번 " + team2[i].name + ", " + team2[i].hitRate + "<br>");
+                }
+            }
+
+        function menuSelect() { //메뉴 선택지
+            document.write("<h2>신나는 야구시합</h2>");
+            document.write("1. 데이터 입력 <br>" );
+            document.write("2. 데이터 출력 <br><br>");
+        }
+
+        function menuPrompt() { //메뉴 선택 값 받기
+            let menu = Number(prompt(
+                "신나는 야구시합\n"
+                + "1. 데이터 입력\n"
+                + "2. 데이터 출력\n"
+                + "메뉴를 선택하세요"));
+            document.write("메뉴선택( 1 - 2 ) " + menu + "<br>");
+            return menu;
+        }
+        
+        function main() {
+
+            let menu =0;
+
+            for (let index = 0; index < 2; index++) {
+                menuSelect();
+                menu = menuPrompt();
+
+                if (menu === 1) {
+                    team1NameAdd();
+                    team1PlayerAdd();
+                    document.write("<br>");
+                    team2NameAdd();
+                    team2PlayerAdd();
+                    document.write("팀 데이터 입력이 완료 되었습니다.");
+                } else if(menu === 2) {
+                    team1Info();
+                    document.write("<br>");
+                    team2Info();
+                } else {
+
+                }
+            }
+        }
+
+        main();
+
+    </script>
+
 </body>
 </html>
