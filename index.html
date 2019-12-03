@@ -38,13 +38,17 @@
         }
         //아웃일때 결과 출력 및 값 수정
         function out() {
-            document.write("아웃!<br>");
+            document.write("아웃! 다음 타자가 타석에 입장했습니다.<br>");
             ballCount[2]++;
+            ballCount[0] = 0; //스트라이크 회수 초기화
+            ballCount[1] = 0; //볼 회수 초기화
         }
         //안타일때 결과 출력 및 값 수정
         function hit() {
-            document.write("안타!<br>");
+            document.write("안타! 다음 타자가 타석에 입장했습니다.<br>");
             ballCount[3]++;
+            ballCount[0] = 0; //스트라이크 회수 초기화
+            ballCount[1] = 0; //볼 회수 초기화
         }
 
         //현재 볼카운트 출력
