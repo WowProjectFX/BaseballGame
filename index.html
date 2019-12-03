@@ -38,14 +38,14 @@
         }
         //아웃일때 결과 출력 및 값 수정
         function out() {
-            document.write("아웃! 다음 타자가 타석에 입장했습니다.<br>");
+            document.write("아웃!  다음 타자가 타석에 입장했습니다.<br>");
             ballCount[2]++;
             ballCount[0] = 0; //스트라이크 회수 초기화
             ballCount[1] = 0; //볼 회수 초기화
         }
         //안타일때 결과 출력 및 값 수정
         function hit() {
-            document.write("안타! 다음 타자가 타석에 입장했습니다.<br>");
+            document.write("안타!  다음 타자가 타석에 입장했습니다.<br>");
             ballCount[3]++;
             ballCount[0] = 0; //스트라이크 회수 초기화
             ballCount[1] = 0; //볼 회수 초기화
@@ -65,33 +65,40 @@
 
         function main() {
 
-            switch (pitch()) {
-                case 0:
-                    strike();
-                    break;
+            while (ballCount[2] < 3) {
 
-                case 1:
-                    ball();
-                    break;
+                switch (pitch()) {
+                    case 0:
+                        strike();
+                        break;
 
-                case 2:
-                    hit();
-                    break;
+                    case 1:
+                        ball();
+                        break;
 
-                default:
+                    case 2:
+                        hit();
+                        break;
+
+                    default:
+                        out();
+                        break;
+                }
+
+                if (ballCount[0] === 3) {
                     out();
-                    break;
+                }
+
+                if (ballCount[1] === 4) {
+                    hit();
+                }
+
+                ballCountPrint();
+
             }
 
-            if (ballCount[0] === 3) {
-                out();
-            }
-
-            if (ballCount[1] === 4) {
-                hit();
-            }
-
-            ballCountPrint();
+            hitCountPrint();
+            document.write("Game Over<br>")
 
         }
 
