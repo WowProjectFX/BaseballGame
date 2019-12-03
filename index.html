@@ -18,67 +18,80 @@
 
     <script>
 
-    let ballCount = [0,0,0,0]; //[0] 스트라이크 , [1] 볼, [3] 아웃, [3] 안타 횟수 저장 
-    
-    // 랜덤한 투구 - 0 스트라이크 , 1 볼, 2 아웃, 3 안타 생성
-    function pitch() { 
-        let pitch = Math.floor(Math.random() * 4);
-        return pitch;
-    }
+        let ballCount = [0, 0, 0, 0]; //[0] 스트라이크 , [1] 볼, [3] 아웃, [3] 안타 횟수 저장 
 
-    //스트라이크일때 결과 출력 및 값 수정
-    function strike() { 
+        // 랜덤한 투구 - 0 스트라이크 , 1 볼, 2 아웃, 3 안타 생성
+        function pitch() {
+            let pitch = Math.floor(Math.random() * 4);
+            return pitch;
+        }
+
+        //스트라이크일때 결과 출력 및 값 수정
+        function strike() {
             document.write("스트라이크!<br>");
             ballCount[0]++;
         }
-    //볼일때 결과 출력 및 값 수정    
-    function ball() {
+        //볼일때 결과 출력 및 값 수정    
+        function ball() {
             document.write("볼!<br>");
             ballCount[1]++;
         }
-    //아웃일때 결과 출력 및 값 수정
-    function out() {
-        document.write("아웃!<br>");
-        ballCount[2]++;
-    }
-    //안타일때 결과 출력 및 값 수정
-    function hit() {
-        document.write("안타!<br>");
-        ballCount[3]++;
-    }
-
-    //현재 볼카운트 출력
-    function ballCountPrint() {
-        document.write(ballCount[0] + "S "
-            + ballCount[1] + "B "
-            + ballCount[2] + "O<br><br>");
-    }
-
-    function main() {
-
-        switch (pitch()) {
-            case 0:
-                strike();
-                break;
-
-            case 1:
-                ball();
-                break;
-
-            case 2:
-                hit();
-                break;
-
-            default:
-                out();
-                break;
+        //아웃일때 결과 출력 및 값 수정
+        function out() {
+            document.write("아웃!<br>");
+            ballCount[2]++;
+        }
+        //안타일때 결과 출력 및 값 수정
+        function hit() {
+            document.write("안타!<br>");
+            ballCount[3]++;
         }
 
-        ballCountPrint();
+        //현재 볼카운트 출력
+        function ballCountPrint() {
+            document.write(ballCount[0] + "S "
+                + ballCount[1] + "B "
+                + ballCount[2] + "O<br><br>");
+        }
 
-    }
+        //최종 안타수 출력
+        function hitCountPrint() {
+            document.write("최종안타수: " + ballCount[3] + "<br>");
+        }
 
-    main();
+        function main() {
+
+            switch (pitch()) {
+                case 0:
+                    strike();
+                    break;
+
+                case 1:
+                    ball();
+                    break;
+
+                case 2:
+                    hit();
+                    break;
+
+                default:
+                    out();
+                    break;
+            }
+
+            if (ballCount[0] === 3) {
+                out();
+            }
+
+            if (ballCount[1] === 4) {
+                hit();
+            }
+
+            ballCountPrint();
+
+        }
+
+        main();
 
     </script>
 
