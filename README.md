@@ -3,8 +3,8 @@
            team2 = [],
            ballCount = [0, 0, 0, 0], //[0] 스트라이크 , [1] 볼, [2] 아웃, [3] 안타 횟수 저장
            team1ScoreCnt = 0, //각회별 점수 계산
-           team2ScoreCnt = 0
-      		 team1Score = [0, 0, 0, 0, 0, 0], //각회별 점수 저장
+           team2ScoreCnt = 0,
+           team1Score = [0, 0, 0, 0, 0, 0], //각회별 점수 저장
            team2Score = [0, 0, 0, 0, 0, 0],
            team1PlayerCnt = 1, //플레이어 카운트
            team2PlayerCnt = 1,
