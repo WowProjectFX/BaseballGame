@@ -7,25 +7,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>야구 점수판 구현</title>
+
+    <style>
+        table,
+        th,
+        td {
+            text-align: center;
+            border: 1px solid black;
+            border-block-color: collapse;
+        }
+
+        th,
+        td {
+            padding: 15px;
+        }
+
+        div {
+            display: inline-block;
+            padding: 0 20px 30px 20px;
+            margin: 15px;
+            border: 1px solid #ccc;
+            line-height: 2;
+        }
+
+        div h3 {
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+
 </head>
 
 <body>
+
+    <h1>전광판</h1>
+
 
     <script>
 
         let team1 = [],
             team2 = [],
             ballCount = [0, 0, 0, 0], //[0] 스트라이크 , [1] 볼, [2] 아웃, [3] 안타 횟수 저장
-            score = 0,
-            team1Score = [],
-            team2Score = [],
+            team1ScoreCnt = 0,
+            team2ScoreCnt = 0
+        team1Score = [0, 0, 0, 0, 0, 0],
+            team2Score = [0, 0, 0, 0, 0, 0],
             team1PlayerCnt = 1,
-            team2PlayerCnt = 1;
+            team2PlayerCnt = 1,
+            team1PitchCnt = 0,
+            team2PitchCnt = 0,
+            team1StrikeOuts = 0,
+            team2StrikeOuts = 0,
+            team1Hitcnt = 0,
+            team2Hitcnt = 0,
+            num = 1;
+
 
         function Player(no, name, hitRate) { // 플레이어 정보 객체를 만들기 위한 생성자
             this.no = no;
             this.name = name;
             this.hitRate = hitRate;
+        }
+
+        function PlayerBallCnt(strike, ball, out, hit) { // 플레이어 정보 객체를 만들기 위한 생성자
+            this.strike = strike;
+            this.ball = ball;
+            this.out = out;
+            this.hit = hit;
         }
 
         function team1NameAdd() { //1팀 이름 추가 
@@ -46,7 +94,7 @@
 
         function team1PlayerTest() { //[테스트 코드]1팀 가상 플레이어 정보 추가
             team1.push("코드스쿼드");
-          
+
             for (let i = 0; i < 9; i++) {
                 let ran = ((Math.random() * 4 + 1) / 10).toFixed(3);
                 player = new Player(i + 1, "[team1] " + (i + 1) + "번 타자", ran);
@@ -57,7 +105,7 @@
 
         function team2PlayerTest() { //[테스트 코드]2팀 가상 플레이어 정보 추가
             team2.push("마블 어벤져스");
-          
+
             for (let i = 0; i < 9; i++) {
                 let ran = ((Math.random() * 4 + 1) / 10).toFixed(3);
                 player = new Player(i + 1, "[team2] " + (i + 1) + "번 타자", ran);
@@ -137,12 +185,12 @@
         function hitRatePitch(h) { // 타자별 타율에 따른 랜덤한 투구 - 0 스트라이크 , 1 볼, 2 아웃, 3 안타 생성
             let pitch = Math.random().toFixed(3); //소수점 3자리 값을 가지는 랜덤한 투구 생성 (0.000 ~ 0.999)
             console.log("pitch: " + pitch);
-        
+
             let percent = []; //타자별 타율 저장
-                percent.push(0.1); //아웃일 확률 10%
-                percent.push((1 - h) / 2 - 0.05); //볼일 확률 
-                percent.push((1 - h) / 2 - 0.05); //스타라이크일 확률 
-                percent.push(Number(h)); //안타일 확률 3
+            percent.push(0.1); //아웃일 확률 10%
+            percent.push((1 - h) / 2 - 0.05); //볼일 확률 
+            percent.push((1 - h) / 2 - 0.05); //스타라이크일 확률 
+            percent.push(Number(h)); //안타일 확률 3
             console.log("percent: " + percent);
 
             let cumulative = 0.000; //순서대로 누적값 저장 1. 아웃 + 2. 볼 + 3. 스크라이크 + 4. 안타  
@@ -182,6 +230,7 @@
 
         function hit() { //안타일때 결과 출력 및 값 수정
             document.write("안타!  다음 타자가 타석에 입장했습니다.<br>");
+
             ballCount[3]++;
             ballCount[0] = 0; //스트라이크 회수 초기화
             ballCount[1] = 0; //볼 회수 초기화
@@ -196,10 +245,11 @@
 
         function hitCountPrint() { //최종 안타수 출력
             document.write("최종안타수: " + ballCount[3] + "<br>");
+            return ballCount[3];
         }
 
         function team1PlayerLotation() { //1팀 플레이어 순서 저장 (1번 ~ 9번 타자 로테이션)
-            document.write(team1PlayerCnt + "번" + team1[team1PlayerCnt].name + "<br>");
+            document.write(team1PlayerCnt + "번 타자" + team1[team1PlayerCnt].name + "입니다.<br>");
             if (team1PlayerCnt === 9) {
                 team1PlayerCnt = 0;
             }
@@ -207,10 +257,10 @@
         }
 
         function team2PlayerLotation() { //2팀 플레이어 순서 저장 (1번 ~ 9번 타자 로테이션)
-            document.write(team2PlayerCnt + "번" + team2[team2PlayerCnt].name + "<br>");
+            document.write(team2PlayerCnt + "번 타자" + team2[team2PlayerCnt].name + "입니다.<br>");
             if (team2PlayerCnt === 9) {
                 team2PlayerCnt = 1;
-            }else {
+            } else {
                 team2PlayerCnt++;
             }
         }
@@ -218,10 +268,15 @@
         function team1Attack() { //1팀 공격
             team1PlayerLotation();
             do {
+
+                team1PitchCnt++;
+
                 if (ballCount[2] === 3) {
-                        return;
+                    return;
                 }
+
                 if (ballCount[0] === 3) {
+                    team1StrikeOuts++;
                     out();
                     team1PlayerLotation()
                 }
@@ -232,16 +287,16 @@
 
                 switch (hitRatePitch(team1[team1PlayerCnt - 1].hitRate)) {
 
-                    case 0: strike(); 
-                            break;
-                    case 1: ball(); 
-                            break;
-                    case 2: out(); 
-                            break;
+                    case 0: strike();
+                        break;
+                    case 1: ball();
+                        break;
+                    case 2: out();
+                        break;
                     default:
-                            hit();
-                            team1PlayerLotation();
-                            break;
+                        hit();
+                        team1PlayerLotation();
+                        break;
                 }
             } while (ballCount[2] < 3)
 
@@ -250,9 +305,13 @@
         function team2Attack() { //2팀 공격
             team2PlayerLotation();
             do {
+
+                team2PitchCnt++;
+
                 if (ballCount[2] == 3) {
-                        return;
-                }else if (ballCount[0] === 3) {
+                    return;
+                } else if (ballCount[0] === 3) {
+                    team2StrikeOuts++;
                     out();
                     team2PlayerLotation()
                 }
@@ -263,29 +322,29 @@
 
                 switch (hitRatePitch(team2[team2PlayerCnt - 1].hitRate)) {
 
-                    case 0: strike(); 
-                            break;
-                    case 1: ball(); 
-                            break;
-                    case 2: out(); 
-                            break;
+                    case 0: strike();
+                        break;
+                    case 1: ball();
+                        break;
+                    case 2: out();
+                        break;
                     default:
-                            hit();
-                            team2PlayerLotation();
-                            break;
+                        hit();
+                        team2PlayerLotation();
+                        break;
                 }
             } while (ballCount[2] < 3)
 
         }
 
-        function team1ScoreCount() { //1팀 각회별 점수 저장
-            if (ballCount[3] > 3) score = ballCount[3] - 3;
-            team1Score.push(score);
+        function team1ScoreCount(i) { //1팀 각회별 점수 저장
+            if (ballCount[3] > 3) team1ScoreCnt = ballCount[3] - 3;
+            team1Score[i - 1] = team1ScoreCnt;
         }
 
-        function team2ScoreCount() { //2팀 각회별 따른 점수 저장
-            if (ballCount[3] > 3) score = ballCount[3] - 3;
-            team2Score.push(score);
+        function team2ScoreCount(i) { //2팀 각회별 따른 점수 저장
+            if (ballCount[3] > 3) team2ScoreCnt = ballCount[3] - 3;
+            team2Score[i - 1] = team2ScoreCnt;;
         }
 
         function team1Tot() { //1팀 최종 점수 합계
@@ -325,8 +384,8 @@
         function team1Action(i) { // 1팀 공격 및 점수 출력
             document.write(i + " 회초 " + team1[0] + "공격<br><br>");
             team1Attack();
-            team1ScoreCount();
-            hitCountPrint();
+            team1ScoreCount(i);
+            team1Hitcnt += hitCountPrint();
             document.write(i + "회초 득점: " + team1Score[i - 1] + "<br>");
             document.write("=============================================<br>");
         }
@@ -334,10 +393,86 @@
         function team2Action(i) {  // 2팀 공격 및 점수 출력 
             document.write(i + " 회말 " + team2[0] + "공격<br><br>");
             team2Attack();
-            team2ScoreCount();
-            hitCountPrint();
+            team2ScoreCount(i);
+            team2Hitcnt += hitCountPrint();
             document.write(i + "회말 득점: " + team2Score[i - 1] + "<br>");
             document.write("=============================================<br>");
+        }
+
+        function scoreBoard() { //팀별 각회당 점수 표시
+
+            document.write("<table>");
+            document.write("<tr>");
+            document.write("<th></th>");
+
+            for (let i = 1; i < 7; i++) {
+                document.write("<th>" + i + "</th>");
+            }
+            document.write("<th>Tot</th>");
+
+            document.write("</tr>");
+
+            team1ScoreBoard();
+            team2ScoreBoard();
+
+            document.write("</table>");
+        }
+
+        function team1ScoreBoard() { //1팀 각회당 점수 표시
+
+            document.write("<tr>");
+            document.write("<td>" + team1[0] + "</td>");
+
+            for (let i = 0; i < 6; i++) {
+                document.write("<td>" + team1Score[i] + "</td>");
+            }
+
+            document.write("<td>" + team1Tot() + "</td>");
+            document.write("</tr>");
+        }
+
+        function team2ScoreBoard() { //2팀 각회당 점수 표시
+
+            document.write("<tr>");
+            document.write("<td>" + team2[0] + "</td>");
+
+            for (let i = 0; i < 6; i++) {
+                document.write("<td>" + team2Score[i] + "</td>");
+            }
+
+            document.write("<td>" + team2Tot() + "</td>");
+            document.write("</tr>");
+            document.write("<br><br>");
+
+        }
+
+        function team1Board() { //1팀 현재 플레이어 상황 
+
+            document.write("<div>");
+            document.write("<h3>" + team1[0] + "</h3>");
+            for (let i = 1; i < team1.length; i++) {
+                document.write(team1[i].no + ". " + team1[i].name + "<br>");
+            }
+            document.write("<br>")
+            document.write("투구: " + team1PitchCnt + "<br>")
+            document.write("삼진: " + team1StrikeOuts + "<br>")
+            document.write("안타: " + team1Hitcnt + "<br>")
+            document.write("</div>")
+        }
+
+        function team2Board() { //2팀 현재 플레이어 상황
+
+            document.write("<div>");
+            document.write("<h3>" + team2[0] + "</h3>");
+            for (let i = 1; i < team2.length; i++) {
+                document.write(team2[i].no + ". " + team2[i].name + "<br>");
+            }
+            document.write("<br>")
+            document.write("투구: " + team2PitchCnt + "<br>")
+            document.write("삼진: " + team2StrikeOuts + "<br>")
+            document.write("안타: " + team2Hitcnt + "<br>")
+            document.write("</div>")
+            document.write("<br><br>")
         }
 
         function gameReady() { //게임 시작 준비 - 메뉴 선택 및 실행
@@ -356,7 +491,6 @@
                         break;
                     case 3:
                         gameStart()
-                        alert("게임시작!!!")
                         break;
                     case 4:
                         test();
@@ -371,12 +505,31 @@
 
         function gameStart() { // 게임 시작
             document.write(team1[0] + " vs " + team2[0] + "의 시합을 시작합니다.<br><br>");
-            for (let i = 1; i <= 6; i++) { //회
-                for (let j = 1; j < 3; j++) { // 초 / 말
+            let skip = 0;
+
+            do {
+
+                skip = Number(prompt("스킵하고 x회말 후 투구 보기(숫자+enter) ? "));
+                console.log(skip);
+
+            } while (skip === 0);
+
+            let i, j;
+
+            for (i = 1; i <= skip; i++) { //회
+
+                for (j = 1; j < 3; j++) { // 초 / 말
                     ballCount = [0, 0, 0, 0];
-                    if (j === 1) team1Action(i);
-                    else team2Action(i);
+                    
+                    if(i === 6 &&  j=== 2 && team2Tot() > team1Tot()) return;
+
+                    if (j === 1) {
+                        team1Action(i);
+                    } else {
+                        team2Action(i);
+                    }
                 }
+
             }
         }
 
@@ -388,7 +541,9 @@
         }
 
         gameReady();
-        gameStart();
+        scoreBoard();
+        team1Board();
+        team2Board();
         gameOver()
 
     </script>
